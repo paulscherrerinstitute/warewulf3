@@ -73,7 +73,7 @@ cd provision
 make dist-gzip
 rpmbuild -D "_sourcedir $PWD" -D "cross_compile 0" \
    -D "mflags -j$(/usr/bin/getconf _NPROCESSORS_ONLN)" \
-   -ba ./warewulf-provision.spec
+   -ba ./warewulf-provision_RHEL8.spec
 ```
 
 ### Build VNFS
@@ -82,4 +82,10 @@ cd vnfs
 ./autogen.sh
 make dist-gzip
 rpmbuild -D "_sourcedir $PWD" -ba ./warewulf-vnfs.spec
+```
+
+## Install the RPMs
+```bash
+cd ~/rpmbuild/RPMS/
+sudo dnf install ./noarch/warewulf-*.rpm ./x86_64/warewulf-*.rpm
 ```
