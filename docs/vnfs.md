@@ -5,10 +5,6 @@ Create _chroot_ environment. The **mkchroot-debian10.sh** will install several p
 Look into the script for details.
 The list of packages is WIP.
 
-### Issue with binaries in many/all rpms!
-Many scripts are _not_ picked up by the rpmbuild!
-Thus, we operate from the src-directories for now.
-
 ```bash
 cd warewulf3/vnfs/bin/
 mkdir -p /opt/warewulf/chroot/debian-rt
@@ -17,7 +13,7 @@ sudo ./mkchroot-debian10.sh /opt/warewulf/chroot/debian-rt
 
 verify the chroot is functional
 ```bash
-sudo ./wwmngchroot -c /opt/warewulf/chroot/debian-rt -s
+sudo wwmngchroot -c /opt/warewulf/chroot/debian-rt -s
 ```
 This should enter the chroot-env provide a prompt.
 
@@ -37,7 +33,7 @@ sudo wwvnfs debian-rt --chroot=/opt/warewulf/chroot/debian-rt
 This will fail as Debian10 has no **/sbin/init**.
 Let's create it than.
 ```bash
-sudo ./wwmngchroot -c /opt/warewulf/chroot/debian-rt -s
+sudo wwmngchroot -c /opt/warewulf/chroot/debian-rt -s
 ln -s /lib/systemd/systemd-udevd /sbin/init
 ```
 Exit and rerun `wwvnfs` command from above.
