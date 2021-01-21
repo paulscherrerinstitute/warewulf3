@@ -56,7 +56,7 @@ network device = enp2s0
 ### Add a node
 #### Test node
 ```bash
-sudo wwsh node new n0000 --netdev=enp25s0 --hwaddr=00:00:00:00:00:01 --ipaddr=10.0.0.2 --fqdn 'gfa-ecmc-01.psi.ch'
+sudo wwsh node new n0000 --netdev=enp25s0 --hwaddr=90:1b:0e:02:0d:19 --ipaddr=10.0.0.2 --fqdn 'gfa-ecmc-01.psi.ch'
 sudo wwsh node list
 NAME                GROUPS              IPADDR              HWADDR             
 ================================================================================
@@ -76,7 +76,7 @@ group {
    # Adding host entry for n0000-enp25s0
    host n0000-enp25s0 {
       option host-name n0000;
-      hardware ethernet 00:00:00:00:00:01;
+      hardware ethernet 90:1b:0e:02:0d:19;
       fixed-address 10.0.0.2;
       next-server 10.0.0.1;
    }
