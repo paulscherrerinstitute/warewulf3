@@ -1,0 +1,3 @@
+[submodule "3rdParty/lvm2"]
+	path = 3rdParty/lvm2
+	url = git://sourceware.org/git/lvm2.git
