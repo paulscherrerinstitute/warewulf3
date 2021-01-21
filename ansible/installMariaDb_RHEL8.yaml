@@ -1,0 +1,74 @@
+# This playbook basically implements https://icinga.com/docs/icinga2/latest/doc/02-getting-started/
+- hosts: RHEL8Masters
+  become: true
+  vars:
+    root_password: wwAccessPass12345
+    timezone: Europe/Zurich
+  tasks:
+    - name: Install mariadb-server
+      dnf:
+        name: mariadb-server
+        state: present
+
+    - name: Install mariadb
+      dnf:
+        name: mariadb
+        state: present
+
+    - name: Start mariadb
+      systemd:
+        name: mariadb
+        state: started
+        enabled: yes
+
+    # reassambles mysql-secure-installation
+    # https://stackoverflow.com/questions/25136498/ansible-answers-to-mysql-secure-installation
+    # moved to python3-PyMySQL for RHEL8.2, no need for EPEL anymore
+    - name: Install mysql python
+      dnf:
+        name: python3-PyMySQL
+        state: present
+
+    - name: Set the root password
+      mysql_user:
+        login_user: root
+        login_password: "{{ root_password }}"
+        user: root
+        password: "{{ root_password }}"
+        check_implicit_admin: yes
+
+    - mysql_user:
+        login_user: root
+        login_password: "{{ root_password }}"
+        name: wwuser
+        password: ''
+        priv: '*.*:ALL'
+        state: present
+
+    - mysql_user:
+        login_user: root
+        login_password: "{{ root_password }}"
+        name: wwroot
+        # TODO: add message to inform user to adapt to this password after installing warewulf-common
+        #       otherwise `wwinit` will fail as it defaults to _changeme_ as password
+        password: wwroot
+        priv: '*.*:ALL'
+        state: present
+
+    - name: Secure the root user for IPV6 localhost (::1)
+      mysql_user: login_user=root login_password="{{ root_password }}" user=root password="{{ root_password }}" host="::1"
+
+    - name: Secure the root user for IPV4 localhost (127.0.0.1)
+      mysql_user: login_user=root login_password="{{ root_password }}" user=root password="{{ root_password }}" host="127.0.0.1"
+
+    - name: Secure the root user for localhost domain
+      mysql_user: login_user=root login_password="{{ root_password }}" user=root password="{{ root_password }}" host="localhost"
+
+    - name: Secure the root user for server_hostname domain
+      mysql_user: login_user=root login_password="{{ root_password }}" user=root password="{{ root_password }}" host="{{ ansible_fqdn }}"
+
+    - name: Deletes anonymous server user
+      mysql_user: login_user=root login_password="{{ root_password }}" user="" host_all=yes state=absent
+
+    - name: Removes the test database
+      mysql_db: login_user=root login_password="{{ root_password }}" db=test state=absent

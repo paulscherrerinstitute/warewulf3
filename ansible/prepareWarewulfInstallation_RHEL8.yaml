@@ -1,0 +1,68 @@
+# This playbook basically implements https://icinga.com/docs/icinga2/latest/doc/02-getting-started/
+- hosts: RHEL8Masters
+  become: true
+  vars:
+    root_password: wwAccessPass12345
+    timezone: Europe/Zurich
+  tasks:
+    - name: Install dnf-plugins-core
+      dnf:
+        name:
+          - dnf-plugins-core
+
+    # TODO: EPEL is needed for 'debootstrap', which is used to create Debian chroot environment
+    #       find another way to debootstrap, w/o EPEL?
+    - name: Import a key for EPEL
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+
+    - name: Install EPEL repo
+      dnf:
+        name: 'https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm'
+        # name: epel-release
+        state: present
+
+    - name: Install debootstrap
+      dnf:
+        name: debootstrap
+        enablerepo: epel
+        state: present
+
+    - name: Install Build Dependencies
+      dnf:
+        name:
+          - '@development'
+          - libacl-devel
+          - libattr-devel
+          - libuuid-devel
+          - openssl-devel
+          - perl-CGI
+          - perl-Compress-Raw-Bzip2
+          - perl-Compress-Raw-Zlib
+          - perl-DBD-MySQL
+          - perl-DBI
+          - perl-Digest
+          - perl-Digest-MD5
+          - perl-IO-Compress
+          - perl-Sys-Syslog
+          - perl-Test-Simple
+          - xz-devel
+          - ipmitool
+          - parted
+          - autofs
+          - e2fsprogs
+          - libarchive
+          - perl-Test-Harness
+          - perl-JSON-PP
+          - bsdtar
+          - which
+          - libtirpc-devel
+        state: present
+
+    - name: Install Build Dependencies for device-mapper
+      dnf:
+        name:
+          - libaio-devel
+
+    # TODO: add steps for 'device-mapper' build/installation

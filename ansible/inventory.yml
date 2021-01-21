@@ -1,0 +1,6 @@
+all:
+  children:
+    RHEL8Masters:
+      hosts:
+        pc13397
+
