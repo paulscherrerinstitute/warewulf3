@@ -30,14 +30,6 @@ sudo dnf install ~/rpmbuild/RPMS/noarch/warewulf-vnfs-3.9.0-0.9883afc.el8.noarch
 ```bash
 sudo wwvnfs debian-rt --chroot=/opt/warewulf/chroot/debian-rt
 ```
-This will fail as Debian10 has no **/sbin/init**.
-Let's create it than.
-```bash
-sudo wwmngchroot -c /opt/warewulf/chroot/debian-rt -s
-ln -s /lib/systemd/systemd-udevd /sbin/init
-```
-Exit and rerun `wwvnfs` command from above.
-
 This should result in someting like.
 ```bash
 _FORTIFY_SOURCE requires compiling with optimization (-O) at /usr/lib64/perl5/features.ph line 207.
@@ -48,7 +40,6 @@ Compiling and compressing VNFS                              : 124.87 s
 Adding image to datastore                                   : 3.74 s
 Total elapsed time                                          : 128.82 s
 ```
-Uncleare so far is whether the `_FORTIFY_SOURCE` has any impact
 
 #### bootstrap the vnfs
 ```bash
