@@ -14,6 +14,7 @@
 
 VNFSDIR=$1
 SUITE=buster
+MIRROR=http://ftp.ch.debian.org/debian
 
 if [ -z "$VNFSDIR" ]; then
 	echo "USAGE: $0 /path/to/chroot"
@@ -27,7 +28,7 @@ echo "debootstrap --variant=minbase $SUITE $VNFSDIR"
 
 debootstrap --components=main,contrib,non-free --variant=minbase \
 	--include=systemd-sysv,openssh-server,openssh-client,isc-dhcp-client,pciutils,strace,nfs-common,ethtool,linux-image-rt-amd64 \
-	$SUITE $VNFSDIR http://ftp.us.debian.org/debian
+	$SUITE $VNFSDIR $MIRROR
 
 if [ $? -ne 0 ]; then
 	echo "ERROR: Failed to create chroot"
