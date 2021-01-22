@@ -26,7 +26,7 @@ echo "Running debootstrap for minimal Debian $SUITE"
 echo "debootstrap --variant=minbase $SUITE $VNFSDIR"
 
 debootstrap --components=main,contrib,non-free --variant=minbase \
-	--include=openssh-server,openssh-client,isc-dhcp-client,pciutils,strace,nfs-common,ethtool,linux-image-rt-amd64 \
+	--include=systemd-sysv,openssh-server,openssh-client,isc-dhcp-client,pciutils,strace,nfs-common,ethtool,linux-image-rt-amd64 \
 	$SUITE $VNFSDIR http://ftp.us.debian.org/debian
 
 if [ $? -ne 0 ]; then
